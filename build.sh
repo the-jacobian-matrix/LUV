@@ -1,3 +1,1 @@
-gcc main.c lexer.c -o build/luv
-
-
+gcc main.c lexer.c parser.c ast.c -o build/luv

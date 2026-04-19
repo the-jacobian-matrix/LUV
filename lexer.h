@@ -16,6 +16,7 @@ typedef enum {
   TOKEN_STRING_INTERP, // Interpolated string &"..."
   TOKEN_TRUE,          // true literal
   TOKEN_FALSE,         // false literal
+  TOKEN_NEN,           // nen literal (null)
 
   // Brackets & Parentheses
   TOKEN_LBRACKET, // [

@@ -118,11 +118,6 @@ static void skip_trivia(Lexer *l) {
     case '\r':
       advance(l);
       break;
-    case '\n':
-      advance(l);
-      l->line++;
-      l->column = 1; // Reset to 1 for new line
-      break;
     case '/':
       if (peek_next(l) == '/') {
         while (!at_end(l) && peek(l) != '\n')
@@ -377,6 +372,23 @@ Token next_token(Lexer *l) {
     return (Token){TOKEN_EOF, l->current, 0, l->line, l->column};
   }
 
+  if (peek(l) == '\n') {
+    int start_line = l->line;
+
+    while (peek(l) == '\n') {
+      advance(l);
+      l->line++;
+      l->column = 1;
+
+      skip_trivia(l);
+      if (peek(l) != '\n')
+        break;
+    }
+
+    return (Token){TOKEN_NEWLINE, l->start, (size_t)(l->current - l->start),
+                   start_line, start_col};
+  }
+
   char c = advance(l);
 
   if (c == '\'')
@@ -509,6 +521,8 @@ const char *token_type_to_string(TokenType t) {
     return "COLON_COLON";
   case TOKEN_SEMICOLON:
     return "SEMICOLON";
+  case TOKEN_NEWLINE:
+    return "NEWLINE";
   case TOKEN_QUESTION:
     return "QUESTION";
   case TOKEN_AT:

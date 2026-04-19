@@ -33,6 +33,7 @@ typedef enum {
   TOKEN_COLON,       // :
   TOKEN_COLON_COLON, // :: (Path separator / scope)
   TOKEN_SEMICOLON,   // ;
+  TOKEN_NEWLINE,    // \n explicit line terminator
   TOKEN_ARROW,       // => (Match arm / Thick arrow)
   TOKEN_THIN_ARROW,  // -> (Return type / Function arrow)
   TOKEN_QUESTION,    // ? (Ternary)

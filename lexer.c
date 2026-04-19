@@ -15,6 +15,7 @@ typedef struct {
 
 static Keyword keywords[] = {{"true", TOKEN_TRUE},
                              {"false", TOKEN_FALSE},
+                             {"nen", TOKEN_NEN},
 
                              {"mut", TOKEN_MUT},
                              {"if", TOKEN_IF},
@@ -427,6 +428,8 @@ const char *token_type_to_string(TokenType t) {
     return "CHAR";
   case TOKEN_STRING_INTERP:
     return "STRING_INTERP";
+  case TOKEN_NEN:
+    return "NEN";
   case TOKEN_MUT:
     return "MUT";
   case TOKEN_IF:

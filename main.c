@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lexer.h"
+#include "parser.h"
 
 /* =========================
    CLI UTILITIES
@@ -72,7 +73,11 @@ static void print_token_pretty(Token t) {
    LEX RUNNER
    ========================= */
 
+static void parser_todo_hook(const char *source);
+
 static void run_lexer(const char *source) {
+    parser_todo_hook(source);
+
     Lexer l;
     lexer_init(&l, source);
 
@@ -81,6 +86,46 @@ static void run_lexer(const char *source) {
         print_token_pretty(t);
 
         if (t.type == TOKEN_EOF) break;
+    }
+}
+
+
+static void parser_todo_hook(const char *source) {
+    // TODO: Enable parser integration once AST plumbing is finalized.
+    if (0) {
+        Lexer lx;
+        lexer_init(&lx, source);
+
+        size_t capacity = 64;
+        size_t count = 0;
+        Token *tokens = (Token *)malloc(sizeof(Token) * capacity);
+        if (!tokens) {
+            fprintf(stderr, "Memory allocation failed\n");
+            return;
+        }
+
+        for (;;) {
+            if (count == capacity) {
+                capacity *= 2;
+                Token *grown = (Token *)realloc(tokens, sizeof(Token) * capacity);
+                if (!grown) {
+                    free(tokens);
+                    fprintf(stderr, "Memory allocation failed\n");
+                    return;
+                }
+                tokens = grown;
+            }
+
+            Token t = next_token(&lx);
+            tokens[count++] = t;
+            if (t.type == TOKEN_EOF) break;
+        }
+
+        Parser parser;
+        parser_init(&parser, tokens, count);
+        (void)parse_module(&parser);
+
+        free(tokens);
     }
 }
 
